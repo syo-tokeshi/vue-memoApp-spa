@@ -20,6 +20,11 @@ const createMemo = () => {
 const saveMemos = () => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(memos.value));
 }
+
+const memoTitle = (memo) => {
+  return memo.split(/\n/)[0];
+}
+
 </script>
 
 <template>
@@ -33,7 +38,7 @@ const saveMemos = () => {
     <div>
       <ul>
         <li v-for="memo in memos" :key="memo.id">
-          <span>{{ memo.content }}</span>
+          <span>{{ memoTitle(memo.content) }}</span>
         </li>
       </ul>
     </div>
