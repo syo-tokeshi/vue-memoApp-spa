@@ -14,6 +14,7 @@
     </form>
   </div>
 </template>
+
 <script>
 export default {
   name: 'MemoForm',
@@ -29,7 +30,7 @@ export default {
   },
   methods: {
     deleteMemo() {
-      if (window.confirm("削除してもよろしいでしょうか？")) {
+      if (window.confirm('削除してもよろしいでしょうか？')) {
         this.memos = this.memos.filter((memo) => memo.id !== this.editingMemo.id)
         this.saveMemosToLocalStorage()
         location.reload()
@@ -61,6 +62,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 textarea {
   background-color: blanchedalmond;
