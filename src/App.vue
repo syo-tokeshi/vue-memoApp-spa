@@ -1,46 +1,59 @@
-<script setup>
-import { ref,reactive,onMounted } from "vue";
-import MemoForm from "./components/MemoForm.vue";
-import { v4 as uuidv4 } from 'uuid';
+<script>
 
-const STORAGE_KEY = "vue-memoapp-spa";
-const memos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
-const memoContent = ref("")
-
-const createMemo = () => {
-  const memo = {
-    id: uuidv4(),
-    content: memoContent.value,
-    isEditing: false,
-  };
-  memos.value.push(memo);
-  saveMemos();
-  memoContent.value = "";
-}
-const saveMemos = () => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(memos.value));
-}
-
-const memoTitle = (memo) => {
-  return memo.split(/\n/)[0];
-}
+export default {
+  data() {
+    return {
+      memos: JSON.parse(localStorage.getItem("vue-memoapp-spa") || "[]"),
+      editingMemo: { id: '', content: "",isEditing: false }
+    };
+  },
+  methods: {
+    memoTitle(memo){
+      return memo.split(/\n/)[0];
+    },
+    editMemo(memo){
+      this.editingMemo.id = memo.id
+      this.editingMemo.content = memo.content
+      this.editingMemo.isEditing = true
+    },
+    createMemo(){
+      this.editingMemo.id = Math.floor(Math.random() * 1000)
+      this.editingMemo.isEditing = true
+    },
+    saveMemos() {
+      if (this.editingMemo.content === "") return;
+      const memo = this.memos.find((memo) => memo.id === this.editingMemo.id);
+      if (memo) {
+        memo.content = this.editingMemo.content;
+        memo.isEditing = false;
+      } else {
+        const newMemo = {...this.editingMemo}
+        newMemo.isEditing = false;
+        this.memos.push(newMemo);
+      }
+      localStorage.setItem("vue-memoapp-spa", JSON.stringify(this.memos));
+      this.editingMemo.content = ''
+      this.editingMemo.isEditing = false
+    },
+  },
+};
 
 </script>
 
 <template>
   <div>
     <div>
-      <form @submit.prevent="createMemo">
-        <textarea v-model="memoContent"></textarea>
-        <button>新規作成</button>
-      </form>
-    </div>
-    <div>
       <ul>
-        <li v-for="memo in memos" :key="memo.id">
-          <span>{{ memoTitle(memo.content) }}</span>
+        <li v-for="(memo, index) in memos" :key="index">
+          <a href="#" v-on:click="editMemo(memo)">{{ memoTitle(memo.content) }}</a>
         </li>
+        <a href="#" v-on:click="createMemo()">X</a>
       </ul>
+      <form v-if="editingMemo.isEditing" @submit.prevent="saveMemos">
+        <textarea v-model="editingMemo.content"></textarea>
+        <button>保存</button>
+        {{ editingMemo.content }}
+      </form>
     </div>
   </div>
 </template>
