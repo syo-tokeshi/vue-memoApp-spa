@@ -1,6 +1,9 @@
 <script>
-import { v4 as uuidv4 } from 'uuid'
+import {v4 as uuidv4} from 'uuid'
+import MemoForm from "@/components/MemoForm.vue";
+
 export default {
+  components: {MemoForm},
   data() {
     return {
       memos: JSON.parse(localStorage.getItem('vue-memoapp-spa') || '[]'),
@@ -8,8 +11,10 @@ export default {
     }
   },
   methods: {
-    memoTitle(memo) {
-      return memo.split(/\n/)[0]
+    createMemo() {
+      this.editingMemo.id = uuidv4()
+      this.editingMemo.content = ''
+      this.editingMemo.isEditing = true
     },
     editMemo(memo) {
       this.setUpMemosEditState(memo);
@@ -21,37 +26,8 @@ export default {
       this.memos.filter((memo) => (memo.isEditing = false))
       memo.isEditing = true
     },
-    createMemo() {
-      this.editingMemo.id = uuidv4()
-      this.editingMemo.content = ''
-      this.editingMemo.isEditing = true
-    },
-    deleteMemo() {
-      this.memos = this.memos.filter((memo) => memo.id !== this.editingMemo.id)
-      this.saveMemosToLocalStorage()
-      this.editingMemo.content = ''
-      this.editingMemo.isEditing = false
-    },
-    saveMemosToLocalStorage(){
-      localStorage.setItem('vue-memoapp-spa', JSON.stringify(this.memos))
-    },
-    saveMemos() {
-      if (this.editingMemo.content === '') return
-      const editingMemo = this.memos.find((memo) => memo.id === this.editingMemo.id)
-      this.createOrFindByMemo(editingMemo)
-      this.saveMemosToLocalStorage()
-      this.editingMemo.content = ''
-      this.editingMemo.isEditing = false
-    },
-    createOrFindByMemo(editingMemo){
-      if (editingMemo) {
-        editingMemo.content = this.editingMemo.content
-        editingMemo.isEditing = false
-      } else {
-        const newMemo = { ...this.editingMemo }
-        newMemo.isEditing = false
-        this.memos.push(newMemo)
-      }
+    memoTitle(memo) {
+      return memo.split(/\n/)[0]
     },
     resetMemosEditState() {
       this.memos.filter((memo) => (memo.isEditing = false))
@@ -79,15 +55,7 @@ export default {
         <a class="create_memo_link" href="#" v-on:click="createMemo()">➕</a>
       </ul>
     </div>
-    <div class="memo_form_wrapper">
-      <form v-if="editingMemo.isEditing" @submit.prevent="saveMemos">
-        <textarea ref="textAreaEditingMemo" cols="40" rows="10" v-model="editingMemo.content"></textarea>
-        <div>
-          <button class="save_button">保存</button>
-          <button class="delete_button" v-on:click="deleteMemo(memo)">削除</button>
-        </div>
-      </form>
-    </div>
+    <MemoForm :currentMemos="memos" :editStateMemo="editingMemo" />
   </div>
 </template>
 
@@ -121,17 +89,7 @@ li {
   display: flex;
   justify-content: center;
 }
-.memo_form_wrapper {
-  margin-top: 20px;
-  margin-left: 100px;
-}
-.save_button {
-  margin-right: 10px;
-  background-color: #e5c6a9;
-}
-.delete_button {
-  background-color: #e19191;
-}
+
 .create_memo_link {
   text-decoration: none;
 }
