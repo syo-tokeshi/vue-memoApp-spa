@@ -1,5 +1,5 @@
 <script>
-
+import { v4 as uuidv4 } from "uuid";
 export default {
   data() {
     return {
@@ -17,8 +17,15 @@ export default {
       this.editingMemo.isEditing = true
     },
     createMemo(){
-      this.editingMemo.id = Math.floor(Math.random() * 1000)
+      this.editingMemo.id = uuidv4()
+      this.editingMemo.content = ""
       this.editingMemo.isEditing = true
+    },
+    deleteMemo(){
+      this.memos = this.memos.filter((memo) => memo.id !== this.editingMemo.id);
+      localStorage.setItem("vue-memoapp-spa", JSON.stringify(this.memos));
+      this.editingMemo.content = ''
+      this.editingMemo.isEditing = false
     },
     saveMemos() {
       if (this.editingMemo.content === "") return;
@@ -44,7 +51,7 @@ export default {
   <div>
     <div>
       <ul>
-        <li v-for="(memo, index) in memos" :key="index">
+        <li v-for="memo in memos" :key="memo.id">
           <a href="#" v-on:click="editMemo(memo)">{{ memoTitle(memo.content) }}</a>
         </li>
         <a href="#" v-on:click="createMemo()">X</a>
@@ -52,7 +59,7 @@ export default {
       <form v-if="editingMemo.isEditing" @submit.prevent="saveMemos">
         <textarea v-model="editingMemo.content"></textarea>
         <button>保存</button>
-        {{ editingMemo.content }}
+        <button  v-on:click="deleteMemo(memo)">削除</button>
       </form>
     </div>
   </div>
