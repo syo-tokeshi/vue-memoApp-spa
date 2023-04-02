@@ -12,6 +12,8 @@ export default {
       return memo.split(/\n/)[0];
     },
     editMemo(memo){
+      this.memos.filter((memo) => memo.isEditing = false);
+      memo.isEditing = true
       this.editingMemo.id = memo.id
       this.editingMemo.content = memo.content
       this.editingMemo.isEditing = true
@@ -42,29 +44,96 @@ export default {
       this.editingMemo.content = ''
       this.editingMemo.isEditing = false
     },
+    backMemosIndex () {
+      this.memos.filter((memo) => memo.isEditing = false);
+      this.editingMemo.isEditing = false
+    },
+  },
+  updated () {
+    if (this.$refs.memo_textarea) {
+      this.$refs.memo_textarea.focus();
+    }
   },
 };
 
 </script>
 
 <template>
-  <div>
-    <div>
+  <h1 v-on:click="backMemosIndex()"><a class="heading" href="#">My Vue App Spa!</a></h1>
+  <div class="container">
+    <div class="memo_list" v-bind:class="{ center: !editingMemo.isEditing }">
       <ul>
-        <li v-for="memo in memos" :key="memo.id">
-          <a href="#" v-on:click="editMemo(memo)">{{ memoTitle(memo.content) }}</a>
+        <li class="memo" v-for="memo in memos" :key="memo.id">
+          <a href="#" v-bind:class="{ select_memo: memo.isEditing }" v-on:click="editMemo(memo)">{{ memoTitle(memo.content) }}</a>
         </li>
-        <a href="#" v-on:click="createMemo()">X</a>
+        <a class="create_memo" href="#" v-on:click="createMemo()">➕</a>
       </ul>
+    </div>
+    <div class="memo-form" >
       <form v-if="editingMemo.isEditing" @submit.prevent="saveMemos">
-        <textarea v-model="editingMemo.content"></textarea>
-        <button>保存</button>
-        <button  v-on:click="deleteMemo(memo)">削除</button>
+        <textarea ref="memo_textarea" cols="40" rows="10" v-model="editingMemo.content"></textarea>
+        <div>
+          <button class="save_button">保存</button>
+          <button class="delete_button" v-on:click="deleteMemo(memo)">削除</button>
+        </div>
       </form>
     </div>
   </div>
 </template>
 
-<style scoped>
-
+<style>
+body{
+  background-color: antiquewhite;
+}
+textarea{
+  background-color: blanchedalmond;
+  border: 3px solid;
+  font-size: 20px;
+}
+h1{
+  text-align: center;
+}
+.heading{
+  text-decoration: none;
+  color: #333333;
+}
+.container{
+  display: flex;
+  justify-content: space-around;
+}
+.memo-form{
+  margin-top: 20px;
+}
+.save_button{
+  margin-right: 10px;
+  background-color: #e5c6a9;
+  width: 100px;
+  height: 30px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.delete_button{
+  background-color: #e19191;
+  width: 100px;
+  height: 30px;
+  cursor: pointer;
+  font-weight: bold;
+}
+li{
+  font-size: 20px;
+}
+.create_memo{
+  text-decoration: none;
+}
+.memo_list.center{
+  width: 200px;
+  margin: auto;
+  font-size: 20px;
+}
+.memo{
+  margin-bottom: 5px;
+}
+.select_memo{
+  color: blue;
+}
 </style>
