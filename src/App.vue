@@ -63,28 +63,21 @@ export default {
 body {
   background-color: antiquewhite;
 }
-textarea {
-  background-color: blanchedalmond;
-  border: 3px solid;
-  font-size: 20px;
-}
-button{
-  width: 100px;
-  height: 30px;
-  cursor: pointer;
-  font-weight: bold;
-}
+
 h1 {
   text-align: center;
 }
+
 h1 > a {
   text-decoration: none;
   color: #333333;
 }
+
 li {
   font-size: 20px;
   margin-bottom: 5px;
 }
+
 .container {
   display: flex;
   justify-content: center;
@@ -93,11 +86,13 @@ li {
 .create_memo_link {
   text-decoration: none;
 }
+
 .memo_list.center {
   width: 200px;
   margin: auto;
   font-size: 20px;
 }
+
 .select_memo {
   color: blue;
 }

@@ -55,10 +55,6 @@ export default {
 }
 </script>
 <style scoped>
-body {
-  background-color: antiquewhite;
-}
-
 textarea {
   background-color: blanchedalmond;
   border: 3px solid;
@@ -70,20 +66,6 @@ button {
   height: 30px;
   cursor: pointer;
   font-weight: bold;
-}
-
-h1 {
-  text-align: center;
-}
-
-h1 > a {
-  text-decoration: none;
-  color: #333333;
-}
-
-li {
-  font-size: 20px;
-  margin-bottom: 5px;
 }
 
 .memo_form_wrapper {
