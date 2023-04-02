@@ -12,11 +12,14 @@ export default {
       return memo.split(/\n/)[0]
     },
     editMemo(memo) {
-      this.memos.filter((memo) => (memo.isEditing = false))
-      memo.isEditing = true
+      this.setUpMemosEditState(memo);
       this.editingMemo.id = memo.id
       this.editingMemo.content = memo.content
       this.editingMemo.isEditing = true
+    },
+    setUpMemosEditState(memo){
+      this.memos.filter((memo) => (memo.isEditing = false))
+      memo.isEditing = true
     },
     createMemo() {
       this.editingMemo.id = uuidv4()
@@ -25,54 +28,60 @@ export default {
     },
     deleteMemo() {
       this.memos = this.memos.filter((memo) => memo.id !== this.editingMemo.id)
-      localStorage.setItem('vue-memoapp-spa', JSON.stringify(this.memos))
+      this.saveMemosToLocalStorage()
       this.editingMemo.content = ''
       this.editingMemo.isEditing = false
     },
+    saveMemosToLocalStorage(){
+      localStorage.setItem('vue-memoapp-spa', JSON.stringify(this.memos))
+    },
     saveMemos() {
       if (this.editingMemo.content === '') return
-      const memo = this.memos.find((memo) => memo.id === this.editingMemo.id)
-      if (memo) {
-        memo.content = this.editingMemo.content
-        memo.isEditing = false
+      const editingMemo = this.memos.find((memo) => memo.id === this.editingMemo.id)
+      this.createOrFindByMemo(editingMemo)
+      this.saveMemosToLocalStorage()
+      this.editingMemo.content = ''
+      this.editingMemo.isEditing = false
+    },
+    createOrFindByMemo(editingMemo){
+      if (editingMemo) {
+        editingMemo.content = this.editingMemo.content
+        editingMemo.isEditing = false
       } else {
         const newMemo = { ...this.editingMemo }
         newMemo.isEditing = false
         this.memos.push(newMemo)
       }
-      localStorage.setItem('vue-memoapp-spa', JSON.stringify(this.memos))
-      this.editingMemo.content = ''
-      this.editingMemo.isEditing = false
     },
-    backMemosIndex() {
+    resetMemosEditState() {
       this.memos.filter((memo) => (memo.isEditing = false))
       this.editingMemo.isEditing = false
     }
   },
   updated() {
-    if (this.$refs.memo_textarea) {
-      this.$refs.memo_textarea.focus()
+    if (this.$refs.textAreaEditingMemo) {
+      this.$refs.textAreaEditingMemo.focus()
     }
   }
 }
 </script>
 
 <template>
-  <h1 v-on:click="backMemosIndex()"><a class="heading" href="#">My Vue App Spa!</a></h1>
+  <h1 v-on:click="resetMemosEditState()"><a class="heading" href="#">My Vue App Spa!</a></h1>
   <div class="container">
-    <div class="memo_list" v-bind:class="{ center: !editingMemo.isEditing }">
-      <ul>
+    <div>
+      <ul class="memo_list" v-bind:class="{ center: !editingMemo.isEditing }">
         <li class="memo" v-for="memo in memos" :key="memo.id">
           <a href="#" v-bind:class="{ select_memo: memo.isEditing }" v-on:click="editMemo(memo)">{{
             memoTitle(memo.content)
           }}</a>
         </li>
-        <a class="create_memo" href="#" v-on:click="createMemo()">➕</a>
+        <a class="create_memo_link" href="#" v-on:click="createMemo()">➕</a>
       </ul>
     </div>
-    <div class="memo-form">
+    <div class="memo_form_wrapper">
       <form v-if="editingMemo.isEditing" @submit.prevent="saveMemos">
-        <textarea ref="memo_textarea" cols="40" rows="10" v-model="editingMemo.content"></textarea>
+        <textarea ref="textAreaEditingMemo" cols="40" rows="10" v-model="editingMemo.content"></textarea>
         <div>
           <button class="save_button">保存</button>
           <button class="delete_button" v-on:click="deleteMemo(memo)">削除</button>
@@ -82,7 +91,7 @@ export default {
   </div>
 </template>
 
-<style>
+<style scoped>
 body {
   background-color: antiquewhite;
 }
@@ -100,19 +109,21 @@ button{
 h1 {
   text-align: center;
 }
-li {
-  font-size: 20px;
-}
-.heading {
+h1 > a {
   text-decoration: none;
   color: #333333;
 }
+li {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
 .container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 }
-.memo-form {
+.memo_form_wrapper {
   margin-top: 20px;
+  margin-left: 100px;
 }
 .save_button {
   margin-right: 10px;
@@ -121,16 +132,13 @@ li {
 .delete_button {
   background-color: #e19191;
 }
-.create_memo {
+.create_memo_link {
   text-decoration: none;
 }
 .memo_list.center {
   width: 200px;
   margin: auto;
   font-size: 20px;
-}
-.memo {
-  margin-bottom: 5px;
 }
 .select_memo {
   color: blue;
