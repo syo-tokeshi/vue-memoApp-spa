@@ -1,9 +1,9 @@
 <script>
-import {v4 as uuidv4} from 'uuid'
-import MemoForm from "@/components/MemoForm.vue";
+import { v4 as uuidv4 } from 'uuid'
+import MemoForm from '@/components/MemoForm.vue'
 
 export default {
-  components: {MemoForm},
+  components: { MemoForm },
   data() {
     return {
       memos: JSON.parse(localStorage.getItem('vue-memoapp-spa') || '[]'),
@@ -17,12 +17,12 @@ export default {
       this.editingMemo.isEditing = true
     },
     editMemo(memo) {
-      this.setUpMemosEditState(memo);
+      this.setUpMemosEditState(memo)
       this.editingMemo.id = memo.id
       this.editingMemo.content = memo.content
       this.editingMemo.isEditing = true
     },
-    setUpMemosEditState(memo){
+    setUpMemosEditState(memo) {
       this.memos.filter((memo) => (memo.isEditing = false))
       memo.isEditing = true
     },
@@ -60,10 +60,6 @@ export default {
 </template>
 
 <style scoped>
-body {
-  background-color: antiquewhite;
-}
-
 h1 {
   text-align: center;
 }

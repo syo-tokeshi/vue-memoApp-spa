@@ -1,7 +1,12 @@
 <template>
   <div class="memo_form_wrapper">
     <form v-if="editingMemo.isEditing" @submit.prevent="saveMemos">
-      <textarea ref="textAreaEditingMemo" cols="40" rows="10" v-model="editingMemo.content"></textarea>
+      <textarea
+        ref="textAreaEditingMemo"
+        cols="40"
+        rows="10"
+        v-model="editingMemo.content"
+      ></textarea>
       <div>
         <button class="save_button">保存</button>
         <button class="delete_button" v-on:click="deleteMemo">削除</button>
@@ -13,24 +18,26 @@
 export default {
   name: 'MemoForm',
   props: {
-    editStateMemo: {type: Object, required: true},
-    currentMemos: {type: Array, required: true},
+    editStateMemo: { type: Object, required: true },
+    currentMemos: { type: Array, required: true }
   },
   data() {
     return {
       editingMemo: this.editStateMemo,
-      memos: this.currentMemos,
-    };
+      memos: this.currentMemos
+    }
   },
   methods: {
     deleteMemo() {
-      this.memos = this.memos.filter((memo) => memo.id !== this.editingMemo.id)
-      this.saveMemosToLocalStorage()
-      location.reload();
-      this.editingMemo.content = ''
-      this.editingMemo.isEditing = false
+      if (window.confirm("削除してもよろしいでしょうか？")) {
+        this.memos = this.memos.filter((memo) => memo.id !== this.editingMemo.id)
+        this.saveMemosToLocalStorage()
+        location.reload()
+        this.editingMemo.content = ''
+        this.editingMemo.isEditing = false
+      }
     },
-    saveMemosToLocalStorage(){
+    saveMemosToLocalStorage() {
       localStorage.setItem('vue-memoapp-spa', JSON.stringify(this.memos))
     },
     saveMemos() {
@@ -41,7 +48,7 @@ export default {
       this.editingMemo.content = ''
       this.editingMemo.isEditing = false
     },
-    createOrFindByMemo(editingMemo){
+    createOrFindByMemo(editingMemo) {
       if (editingMemo) {
         editingMemo.content = this.editingMemo.content
         editingMemo.isEditing = false
@@ -50,7 +57,7 @@ export default {
         newMemo.isEditing = false
         this.memos.push(newMemo)
       }
-    },
+    }
   }
 }
 </script>
