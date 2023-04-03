@@ -51,7 +51,7 @@ export default {
       <ul class="memo_list" v-bind:class="{ center: !editingMemo.isEditing }">
         <li v-for="memo in memos" :key="memo.id">
           <a href="#" v-bind:class="{ select_memo: memo.isEditing }" v-on:click="editMemo(memo)">
-            {{memoTitle(memo.content) }}
+            {{ memoTitle(memo.content) }}
           </a>
         </li>
         <li>

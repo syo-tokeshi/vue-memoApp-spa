@@ -63,7 +63,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 textarea {
   background-color: blanchedalmond;
   border: 3px solid;
