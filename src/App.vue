@@ -55,7 +55,7 @@ export default {
           </a>
         </li>
         <li>
-          <a class="create_memo_link" href="#" v-on:click="createMemo()">➕</a>
+          <a href="#" v-on:click="createMemo()">➕</a>
         </li>
       </ul>
     </div>
@@ -67,7 +67,6 @@ export default {
 h1 {
   text-align: center;
   a {
-    text-decoration: none;
     color: #333333;
   }
 }
@@ -84,10 +83,6 @@ li:last-child {
 .container {
   display: flex;
   justify-content: center;
-}
-
-.create_memo_link {
-  text-decoration: none;
 }
 
 .memo_list.center {
