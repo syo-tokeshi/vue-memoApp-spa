@@ -43,35 +43,42 @@ export default {
 </script>
 
 <template>
-  <h1 v-on:click="resetMemosEditState()"><a class="heading" href="#">My Vue App Spa!</a></h1>
+  <h1 v-on:click="resetMemosEditState()">
+    <a href="#">My Vue App Spa!</a>
+  </h1>
   <div class="container">
     <div>
       <ul class="memo_list" v-bind:class="{ center: !editingMemo.isEditing }">
-        <li class="memo" v-for="memo in memos" :key="memo.id">
-          <a href="#" v-bind:class="{ select_memo: memo.isEditing }" v-on:click="editMemo(memo)">{{
-            memoTitle(memo.content)
-          }}</a>
+        <li v-for="memo in memos" :key="memo.id">
+          <a href="#" v-bind:class="{ select_memo: memo.isEditing }" v-on:click="editMemo(memo)">
+            {{memoTitle(memo.content) }}
+          </a>
         </li>
-        <a class="create_memo_link" href="#" v-on:click="createMemo()">➕</a>
+        <li>
+          <a class="create_memo_link" href="#" v-on:click="createMemo()">➕</a>
+        </li>
       </ul>
     </div>
     <MemoForm :currentMemos="memos" :editStateMemo="editingMemo" />
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 h1 {
   text-align: center;
-}
-
-h1 > a {
-  text-decoration: none;
-  color: #333333;
+  a {
+    text-decoration: none;
+    color: #333333;
+  }
 }
 
 li {
-  font-size: 20px;
   margin-bottom: 5px;
+  font-size: 20px;
+}
+
+li:last-child {
+  list-style: none;
 }
 
 .container {
