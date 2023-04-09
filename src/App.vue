@@ -26,6 +26,9 @@ export default {
       this.memos.filter((memo) => (memo.isEditing = false))
       memo.isEditing = true
     },
+    updateMemos(memos) {
+      this.memos = memos
+    },
     memoTitle(memo) {
       return memo.split(/\n/)[0]
     },
@@ -59,7 +62,7 @@ export default {
         </li>
       </ul>
     </div>
-    <MemoForm :currentMemos="memos" :editStateMemo="editingMemo" />
+    <MemoForm :currentMemos="memos" :editStateMemo="editingMemo" @update="updateMemos" />
   </div>
 </template>
 
