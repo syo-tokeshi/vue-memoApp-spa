@@ -33,7 +33,7 @@ export default {
       if (window.confirm('削除してもよろしいでしょうか？')) {
         this.memos = this.memos.filter((memo) => memo.id !== this.editingMemo.id)
         this.saveMemosToLocalStorage()
-        this.$emit('update', this.memos);
+        this.$emit('update', this.memos)
         this.editingMemo.content = ''
         this.editingMemo.isEditing = false
       }
