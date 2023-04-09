@@ -43,19 +43,19 @@ export default {
 </script>
 
 <template>
-  <h1 v-on:click="resetMemosEditState()">
+  <h1 @click="resetMemosEditState()">
     <a href="#">My Vue App Spa!</a>
   </h1>
   <div class="container">
     <div>
-      <ul class="memo_list" v-bind:class="{ center: !editingMemo.isEditing }">
+      <ul class="memo_list" :class="{ center: !editingMemo.isEditing }">
         <li v-for="memo in memos" :key="memo.id">
-          <a href="#" v-bind:class="{ select_memo: memo.isEditing }" v-on:click="editMemo(memo)">
+          <a href="#" :class="{ select_memo: memo.isEditing }" @click="editMemo(memo)">
             {{ memoTitle(memo.content) }}
           </a>
         </li>
         <li>
-          <a href="#" v-on:click="createMemo()">➕</a>
+          <a href="#" @click="createMemo()">➕</a>
         </li>
       </ul>
     </div>
