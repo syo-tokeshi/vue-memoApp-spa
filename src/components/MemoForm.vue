@@ -44,12 +44,12 @@ export default {
     saveMemos() {
       if (this.editingMemo.content === '') return
       const editingMemo = this.memos.find((memo) => memo.id === this.editingMemo.id)
-      this.createOrFindByMemo(editingMemo)
+      this.createOrUpdateMemo(editingMemo)
       this.saveMemosToLocalStorage()
       this.editingMemo.content = ''
       this.editingMemo.isEditing = false
     },
-    createOrFindByMemo(editingMemo) {
+    createOrUpdateMemo(editingMemo) {
       if (editingMemo) {
         editingMemo.content = this.editingMemo.content
         editingMemo.isEditing = false
