@@ -29,13 +29,16 @@ export default {
     updateMemos(memos) {
       this.memos = memos
     },
+    saveMemosToLocalStorage(memos) {
+      localStorage.setItem('vue-memoapp-spa', JSON.stringify(memos))
+    },
     memoTitle(memo) {
       return memo.split(/\n/)[0]
     },
     resetMemosEditState() {
       this.memos.filter((memo) => (memo.isEditing = false))
       this.editingMemo.isEditing = false
-    }
+    },
   },
   updated() {
     if (this.$refs.textAreaEditingMemo) {
@@ -62,7 +65,7 @@ export default {
         </li>
       </ul>
     </div>
-    <MemoForm :currentMemos="memos" :editStateMemo="editingMemo" @update="updateMemos" />
+    <MemoForm :currentMemos="memos" :editStateMemo="editingMemo" @update="updateMemos" @toLocalStorage="saveMemosToLocalStorage" />
   </div>
 </template>
 

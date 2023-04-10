@@ -32,20 +32,17 @@ export default {
     deleteMemo() {
       if (window.confirm('削除してもよろしいでしょうか？')) {
         this.memos = this.memos.filter((memo) => memo.id !== this.editingMemo.id)
-        this.saveMemosToLocalStorage()
+        this.$emit('toLocalStorage', this.memos)
         this.$emit('update', this.memos)
         this.editingMemo.content = ''
         this.editingMemo.isEditing = false
       }
     },
-    saveMemosToLocalStorage() {
-      localStorage.setItem('vue-memoapp-spa', JSON.stringify(this.memos))
-    },
     saveMemos() {
       if (this.editingMemo.content === '') return
       const editingMemo = this.memos.find((memo) => memo.id === this.editingMemo.id)
       this.createOrUpdateMemo(editingMemo)
-      this.saveMemosToLocalStorage()
+      this.$emit('toLocalStorage', this.memos)
       this.editingMemo.content = ''
       this.editingMemo.isEditing = false
     },
