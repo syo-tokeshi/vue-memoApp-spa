@@ -38,7 +38,7 @@ export default {
     resetMemosEditState() {
       this.memos.filter((memo) => (memo.isEditing = false))
       this.editingMemo.isEditing = false
-    },
+    }
   },
   updated() {
     if (this.$refs.textAreaEditingMemo) {
@@ -65,7 +65,12 @@ export default {
         </li>
       </ul>
     </div>
-    <MemoForm :currentMemos="memos" :editStateMemo="editingMemo" @update="updateMemos" @toLocalStorage="saveMemosToLocalStorage" />
+    <MemoForm
+      :currentMemos="memos"
+      :editStateMemo="editingMemo"
+      @update="updateMemos"
+      @toLocalStorage="saveMemosToLocalStorage"
+    />
   </div>
 </template>
 
