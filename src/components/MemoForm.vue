@@ -9,7 +9,7 @@
       ></textarea>
       <div>
         <button class="save_button">保存</button>
-        <button class="delete_button" @click="deleteMemo">削除</button>
+        <button type="button" class="delete_button" @click="deleteMemo">削除</button>
       </div>
     </form>
   </div>
